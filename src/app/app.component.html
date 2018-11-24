@@ -1,0 +1,90 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-card class="main">
+    <mat-card-title style="text-align:center">
+      <h1>
+        Welcome to {{ title }}!
+      </h1>
+    </mat-card-title>
+    <mat-card-content>
+        <mat-tab-group class="demo-tab-group" (selectedTabChange)="GetRandomJoke($event)">
+            <mat-tab label="Tab 1">
+              <ng-template mat-tab-label>
+                <mat-icon>security</mat-icon>
+                <span>Category Joke</span>
+              </ng-template>
+              <div class="demo-tab-content">
+                  <mat-form-field class="joke-form-field">
+                      <mat-select placeholder="..Select Category" [(ngModel)]="selectedValue" name="category" (change)="GetCategoryJoke()">
+                        <mat-option *ngFor="let category of categoryList" [value]="category">
+                          {{category}}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-card class="joke" *ngIf="joke !== null">
+                        <mat-card-title>
+                            <img mat-card-avatar  src="{{joke?.icon_url}}">
+                        </mat-card-title>
+                        <mat-card-content>
+                          <a href="{{joke?.url}}">{{joke?.value}}</a>
+                        </mat-card-content>
+                    </mat-card>
+              </div>
+            </mat-tab>
+            <mat-tab label="Tab 2">
+              <ng-template mat-tab-label>
+                <mat-icon>attach_file</mat-icon>
+                <span>Random Joke</span>
+              </ng-template>
+              <div class="demo-tab-content">
+                  <mat-card class="joke"  *ngIf="joke !== null">
+                      <mat-card-title>
+                          <img mat-card-avatar  src="{{joke?.icon_url}}">
+                      </mat-card-title>
+                      <mat-card-content>
+                        <a href="{{joke?.url}}">{{joke?.value}}</a>
+                      </mat-card-content>
+                  </mat-card>
+              </div>  
+            </mat-tab>
+            <mat-tab label="Tab 3">
+              <ng-template mat-tab-label>
+                <mat-icon>security</mat-icon>
+                <span>Free Text Joke</span>
+              </ng-template>
+              <div class="demo-tab-content">
+                  <mat-form-field hintLabel="Max 10 characters" class="joke-form-field">
+                    <input matInput #input maxlength="10" placeholder="Free Text Search"  [(ngModel)]="query">
+                  <button mat-raised-button matSuffix color="primary" (click)="GetJokeByFreeText()">Search</button>
+                    <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                  <mat-table #table [dataSource]="jokes">
+                      <!-- joke Column -->
+                      <ng-container matColumnDef="joke">
+                        <mat-header-cell *matHeaderCellDef> Free Text Joke </mat-header-cell>
+                        <mat-cell *matCellDef="let joke"> 
+                            <mat-card class="joke">
+                                <mat-card-title>
+                                    <img mat-card-avatar  src="{{joke?.icon_url}}">
+                                </mat-card-title>
+                                <mat-card-content>
+                                  <a href="{{joke?.url}}">{{joke?.value}}</a>
+                                </mat-card-content>
+                            </mat-card>                          
+                        </mat-cell>
+                      </ng-container>
+                  
+                      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                  
+                    <mat-paginator #paginator
+                                   [pageSize]="2"
+                                   [pageSizeOptions]="[2, 4, 6]"
+                                   [showFirstLastButtons]="true">
+                    </mat-paginator>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+    </mat-card-content>
+</mat-card>
+
